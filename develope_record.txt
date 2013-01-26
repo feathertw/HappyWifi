@@ -1,0 +1,67 @@
+NCKU_WIFI_LOGIN(v1) 20121015
+	1.基本功能完成
+	2.在登入ncku wifi狀況下，可登入帳號密碼
+
+NCKU_WIFI_LOGIN_v1018(v2) 20121018
+	1.修正對應android4.0規則
+
+NCKU_WIFI_LOGIN_v3(v3) 20121022
+	1.(v2有誤)進一步修正對應android4.0規則
+
+NCKU_WIFI_Beta4(v4) 20121025
+	1.將自動登入功能補上
+	2.開啟app即開啟wifi
+	3.可在wifi未完成開啟時，按下登入
+	3.登入過程可隱藏在背景
+	
+NCKU_WIFI_Beta5(v5) 20121027
+	1.在menu中加入兩則使用者選項，自動開啟wifi、自動登入系統
+	2.自動登入後在狀態列中可取消自動登入
+	3.在狀態列中可取消程式運作
+	4.非強制登入NCKU-WLAN，而採增加至list，而系統自動選擇登入
+	5.在wifi結束後，自動關閉狀態列提示
+
+	1.將broad加上boolean變數，設定當service結束後，recevier一起結束
+	2.當logout結束時，將其它service一併結束
+	3.可在登入的過程中，將系統清除
+	
+NCKU_WIFI_Beta6(v6) 20121103
+	1.增加開起app前，將之前的service及notfi解除
+	2.將setting移到主畫面
+	3.美編setting
+	4.細節修正
+	5.增加首次開啟outline->取消
+
+HappyWiFi v1.0 20121108
+	1.在pause加finish()
+
+
+	
+	
+//problem
+	1A.ssid可能不同->取消specify檢查，增加取消自動開啟wifi功能
+	2A.若全自動，有否可能在連線到別的wifi，此時開啟app，先登入 而wifi才開啟連線到ncku_wlan->> 不會，會先切換到ncku_wlan，起動recevie，才會聽登入
+
+//advice
+	1A.全自動下，可設定notification取消自動設定，同時倒數結束notification
+	2A.增加一個可自動讀取pref的class
+	3A.若非連線到ncku_wlan，要有不同通知
+	4A.測試login success的是否精簡，是
+	5A.notification獨立
+	6.測試login success的另一個string，以符合大部份網頁設計
+	7A.auto system 的順序->若要自動log in，則一定要先開自動wifi
+	8A.取消自動登入，且解除該次登入
+	9A.取消開啟wifi時，bar圖式是否取消
+	10A.取消全部auto system
+	*11A.設計成不強制連ncku->取消指定連線，改為若沒有記錄，則增加ncku_wlan進入wifi list，採記錄中的自由連線
+	12A.增加斷線時的broadcast
+	13.增加訊號強度表
+	14.有否訊號不良後，又連線回來的圖示處理
+	15.wifiManager.getWifiState()==WifiManager.WIFI_STATE_ENABLED
+	16.A增加按下login前，先確任wifi是否開啟
+	17.A中途關閉從系統wifi，bar列怎麼辦->增加一個broadcast
+	
+
+//test
+	1A.service結束後，原本的thread是否保持運作-> activity結束後，另開的thread繼續運作
+

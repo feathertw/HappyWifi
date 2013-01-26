@@ -1,0 +1,29 @@
+<resources>
+ 
+    <string name="app_name">NCKU HAPPY WIFI v1.0</string>
+    <string name="title_activity_main">HappyWiFi</string>
+    
+    <string name="SETTING">SETTING</string>
+    <string name="edit_hint_account">account</string>
+    <string name="edit_hint_password">password</string>
+    <string name="button_login">Login</string>
+    <string name="button_setting">setting</string>
+    <string name="setting_auto_wifi">Auto to Open Wifi</string>
+    <string name="setting_auto_login">Auto to Login NCKU</string>    
+    
+    <string name="about">關於</string>
+    <string name="about_close">關閉</string>
+    <string name="about_comment">評價</string>
+    <string name="about_content">
+        	version 1.0
+        	\n*可記憶帳號密碼
+        	\n*可設定自動連線wifi
+        	\n*可設定自動登入帳號密碼
+        	\n*可在狀態列消取自動登入
+        	\n*可在狀態列取消程式運作
+        	\n*可在狀態列選擇登出、離線　
+    </string>
+    
+    
+    
+</resources>
