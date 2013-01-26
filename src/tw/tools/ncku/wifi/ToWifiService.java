@@ -4,6 +4,7 @@ import java.util.List;
 
 import tw.references.MyConnectHttp;
 import tw.references.MyNotification;
+import tw.references.PararmeterValue;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -93,7 +94,7 @@ public class ToWifiService extends Service {
 	public void setCheckOrBulidSSID(){
 		Log.i(TAG, "----------setChooseOrBulidSSID()----------");
 		
-		String networkSSID = MainActivity.WIFI_SSID;
+		String networkSSID = PararmeterValue.WIFI_SSID;
 		
 		Boolean ssidExsisted=false;
 		List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();

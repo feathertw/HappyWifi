@@ -29,7 +29,6 @@ import android.widget.EditText;
 public class MainActivity extends Activity {
 
 	public static final String TAG = "`NCKU_WIFI_LOGIN";
-	public static final String WIFI_SSID= "NCKU-WLAN";
 	public static final Boolean D=false;
 	
 	public static final int MENU_ABOUT=0;

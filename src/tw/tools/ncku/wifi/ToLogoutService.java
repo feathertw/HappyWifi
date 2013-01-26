@@ -1,13 +1,12 @@
 package tw.tools.ncku.wifi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import tw.references.MyConnectHttp;
 import tw.references.MyNotification;
+import tw.references.PararmeterValue;
 
 import android.app.Service;
 import android.content.Intent;
@@ -64,15 +63,12 @@ public class ToLogoutService extends Service {
 		new Thread(new Runnable() {
 			public void run() {
 				
-				List<NameValuePair> dataPairs = new ArrayList<NameValuePair>();
-				dataPairs.add(new BasicNameValuePair("userStatus", "1"));
-				dataPairs.add(new BasicNameValuePair("err_flag", "0"));
-				dataPairs.add(new BasicNameValuePair("err_msg", ""));
+				List<NameValuePair> dataPairs = PararmeterValue.getLogoutDataPair();
 				
-				final String result = mConnectHttp.post_url_contents("https://wlan.ncku.edu.tw/logout.html", dataPairs);
+				final String result = mConnectHttp.post_url_contents(PararmeterValue.logoutHttps, dataPairs);
 				mHandler.post(new Runnable(){
     				public void run(){
-						if (result!=null && result.indexOf("Click here to close window") != -1) {
+						if (result!=null && result.indexOf(PararmeterValue.loginAppearValue) != -1) {
 							if(MainActivity.D) Toast.makeText(ToLogoutService.this, "Logout Success", Toast.LENGTH_LONG).show();
 							if(MainActivity.D) Log.i(TAG, "Logout Success");
 						}

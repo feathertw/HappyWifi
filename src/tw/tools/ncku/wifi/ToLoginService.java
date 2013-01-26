@@ -1,14 +1,13 @@
 package tw.tools.ncku.wifi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import tw.references.MyConnectHttp;
 import tw.references.MyNotification;
 import tw.references.MyPreference;
+import tw.references.PararmeterValue;
 import tw.references.ToListenWifiOffService;
 
 import android.app.Service;
@@ -91,17 +90,16 @@ public class ToLoginService extends Service {
 				String account = settings.getString(MyPreference.PREF_ACCOUNT, null);
 				String password = settings.getString(MyPreference.PREF_PASSWORD, null);
 
-				List<NameValuePair> dataPairs = new ArrayList<NameValuePair>();
-				dataPairs.add(new BasicNameValuePair("buttonClicked", "4"));
-				dataPairs.add(new BasicNameValuePair("username", account));
-				dataPairs.add(new BasicNameValuePair("password", password));
-				final String result = mConnectHttp.post_url_contents("https://wlan.ncku.edu.tw/login.html", dataPairs);
-				final String sresult = mConnectHttp.get_http_data("http://ctc8631.qov.tw/internet_check.html");/*can modify*/
+				List<NameValuePair> dataPairs = PararmeterValue.getLoginDataPair(account, password);
+				
+				final String result = mConnectHttp.post_url_contents(PararmeterValue.loginHttps, dataPairs);
+				final String sresult = mConnectHttp.get_http_data(PararmeterValue.confirmHttps);/*can modify*/
+				
 //				Log.i(TAG,""+result);
 //				Log.i(TAG,""+sresult);
 				mHandler.post(new Runnable(){
     				public void run(){
-    					if(result!=null && result.indexOf("Login Successful") != -1) {
+    					if(result!=null && result.indexOf( PararmeterValue.loginAppearValue ) != -1) {
     						if(MainActivity.D) Toast.makeText(ToLoginService.this, "Login Success", Toast.LENGTH_LONG).show();
     						if(MainActivity.D) Log.i(TAG, "Login Success");
     						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
@@ -113,7 +111,7 @@ public class ToLoginService extends Service {
     						
     					} 
     					else {
-    						if(sresult!=null && sresult.indexOf("*FOR_ANDROID_NCKU_WIFI*") != -1) {
+    						if(sresult!=null && sresult.indexOf( PararmeterValue.comfirmAppearValue ) != -1) {
     							if(MainActivity.D) Toast.makeText(ToLoginService.this, "Already Connected", Toast.LENGTH_LONG).show();
     							if(MainActivity.D) Log.i(TAG, "Already Connected");
     							mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
