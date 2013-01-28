@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 
+import tw.parameters.PararmeterValue;
 import tw.references.MyConnectHttp;
 import tw.references.MyNotification;
 import tw.references.MyPreference;
-import tw.references.PararmeterValue;
 import tw.references.ToListenWifiOffService;
 
 import android.app.Service;
@@ -93,7 +93,7 @@ public class ToLoginService extends Service {
 				List<NameValuePair> dataPairs = PararmeterValue.getLoginDataPair(account, password);
 				
 				final String result = mConnectHttp.post_url_contents(PararmeterValue.loginHttps, dataPairs);
-				final String sresult = mConnectHttp.get_http_data(PararmeterValue.confirmHttps);/*can modify*/
+				final String sresult = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);/*can modify*/
 				
 //				Log.i(TAG,""+result);
 //				Log.i(TAG,""+sresult);
@@ -111,7 +111,7 @@ public class ToLoginService extends Service {
     						
     					} 
     					else {
-    						if(sresult!=null && sresult.indexOf( PararmeterValue.comfirmAppearValue ) != -1) {
+    						if(sresult!=null && sresult.indexOf( MyConnectHttp.comfirmAppearValue ) != -1) {
     							if(MainActivity.D) Toast.makeText(ToLoginService.this, "Already Connected", Toast.LENGTH_LONG).show();
     							if(MainActivity.D) Log.i(TAG, "Already Connected");
     							mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);

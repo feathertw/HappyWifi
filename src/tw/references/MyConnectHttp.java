@@ -23,6 +23,9 @@ public class MyConnectHttp {
 	
 	private Context context;
 	
+	public static final String confirmHttps="http://ctc8631.qov.tw/internet_check.html";
+	public static final String comfirmAppearValue="*FOR_ANDROID_NCKU_WIFI*";
+	
 	public MyConnectHttp(Context context){
 		this.context=context;
 	}
