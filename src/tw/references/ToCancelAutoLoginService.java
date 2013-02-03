@@ -19,6 +19,7 @@ public class ToCancelAutoLoginService extends Service {
 	public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         Log.i(TAG,"+++++++++++ON START+++++++++++");
+        MyOperateState.ToCancelAutoLoginService=true;
         
         mPref=new MyPreference(this);
 //        mPref.setBoolean(MyPreference.PREF_SWITCH_AUTOWIFI, false);
@@ -34,6 +35,7 @@ public class ToCancelAutoLoginService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"+++++++++++ON DESTROY+++++++++++");
+        MyOperateState.ToCancelAutoLoginService=false;
 //        startActivity(new Intent(this, MainActivity.class));//error
     }
 

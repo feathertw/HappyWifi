@@ -16,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
@@ -80,6 +81,12 @@ public class MyConnectHttp {
 		return wifiInfo.getSSID();
 	}
 	
+	public List<ScanResult> getWifiScanResult(){
+		WifiManager wifiManager=(WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		
+		return wifiManager.getScanResults();
+	}
+	
 	public String get_http_data(String url) {
 		try {
 			HttpClient client = new DefaultHttpClient();
@@ -91,7 +98,8 @@ public class MyConnectHttp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return "";
+//		return null;
 	}
 
 	public String post_url_contents(String url, List<NameValuePair> params) {
@@ -108,6 +116,7 @@ public class MyConnectHttp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return "";
+//		return null;
 	}
 }

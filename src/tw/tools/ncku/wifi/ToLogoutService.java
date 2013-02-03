@@ -1,16 +1,12 @@
 package tw.tools.ncku.wifi;
 
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-
-import tw.parameters.PararmeterValue;
+import tw.parameters.SchoolCheck;
 import tw.references.MyConnectHttp;
 import tw.references.MyNotification;
+import tw.references.MyOperateState;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,7 +24,9 @@ public class ToLogoutService extends Service {
 	public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         Log.i(TAG,"+++++++++++ON START+++++++++++");
-        if(MainActivity.D) Toast.makeText(this, "LOGOUT SERVICE ONSTART", Toast.LENGTH_SHORT).show();
+        MyOperateState.ToLogoutService=true;
+        
+        if(MyOperateState.D) Toast.makeText(this, "LOGOUT SERVICE ONSTART", Toast.LENGTH_SHORT).show();
         
         initSetting();
         sendLogOut();
@@ -40,13 +38,12 @@ public class ToLogoutService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"+++++++++++ON DESTROY+++++++++++");
+        MyOperateState.ToLogoutService=false;
         
         mNotif.setNotif(MyNotification.NOTIF_CANCEL);
         mNotif.setNotifAutoLogin(false);
         stopService(new Intent(ToLogoutService.this, ToWifiService.class));
         stopService(new Intent(ToLogoutService.this, ToLoginService.class));
-        if(MainActivity.D) Toast.makeText(this, "LOGOUT SERVICE DESTROY", Toast.LENGTH_SHORT).show();
-        
     }
 
     
@@ -59,21 +56,15 @@ public class ToLogoutService extends Service {
 	private void sendLogOut(){
 		Log.i(TAG, "----------sendLogOut()----------");
 		
-		final Handler mHandler = new Handler();
 		new Thread(new Runnable() {
 			public void run() {
-				
-				List<NameValuePair> dataPairs = PararmeterValue.getLogoutDataPair();
-				
-				final String result = mConnectHttp.post_url_contents(PararmeterValue.logoutHttps, dataPairs);
-				mHandler.post(new Runnable(){
-    				public void run(){
-						if (result!=null && result.indexOf(PararmeterValue.loginAppearValue) != -1) {
-							if(MainActivity.D) Toast.makeText(ToLogoutService.this, "Logout Success", Toast.LENGTH_LONG).show();
-							if(MainActivity.D) Log.i(TAG, "Logout Success");
-						}
-					} 
-				});
+				if(MyOperateState.TANET){
+					String logoutResult = mConnectHttp.post_url_contents(SchoolCheck.school.logoutHttps, SchoolCheck.school.LogoutDataPair);
+//					Log.i(TAG,logoutResult);
+					if (logoutResult.indexOf(SchoolCheck.school.logoutAppearValue) != -1) {
+						Log.i(TAG, "Logout Success");
+					}
+				}
 				mConnectHttp.setWiFiState(false);
 			}
 		}).start();

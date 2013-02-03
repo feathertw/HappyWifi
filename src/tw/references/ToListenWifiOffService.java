@@ -1,6 +1,5 @@
 package tw.references;
 
-import tw.tools.ncku.wifi.MainActivity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,6 +24,7 @@ public class ToListenWifiOffService extends Service {
 	public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         Log.i(TAG,"+++++++++++ON START+++++++++++");
+        MyOperateState.ToListenWifiOffService=true;
         
         mConnectHttp=new MyConnectHttp(this);
         mNotif=new MyNotification(this);
@@ -39,15 +39,22 @@ public class ToListenWifiOffService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"+++++++++++ON DESTROY+++++++++++");
+        MyOperateState.ToListenWifiOffService=false;
         
         unregisterReceiver(toListenWifiOffReceiver);
+        
+        Log.i("xxxxx","ToWifiService:"+MyOperateState.ToWifiService);
+        Log.i("xxxxx","ToLoginService:"+MyOperateState.ToLoginService);
+        Log.i("xxxxx","ToLogoutService:"+MyOperateState.ToLogoutService);
+        Log.i("xxxxx","ToCancelAutoLoginService:"+MyOperateState.ToCancelAutoLoginService);
+        Log.i("xxxxx","ToListenWifiOffService:"+MyOperateState.ToListenWifiOffService);
         
     }
 
 	class ToListenWifiOffReceiver extends BroadcastReceiver {
 		public void onReceive(Context context, Intent intent) {
 			Log.i(TAG, "----------ToLoginReceiver----------");
-			if(MainActivity.D) Toast.makeText(ToListenWifiOffService.this, "ToListenWifiOffReceiver",Toast.LENGTH_SHORT).show();
+			if(MyOperateState.D) Toast.makeText(ToListenWifiOffService.this, "ToListenWifiOffReceiver",Toast.LENGTH_SHORT).show();
 			
 			if (!mConnectHttp.getConnectState() ) {
 				mNotif.setNotif(MyNotification.NOTIF_CANCEL);

@@ -1,8 +1,7 @@
 package tw.tools.ncku.wifi;
 
-
-import tw.references.MyConnectHttp;
 import tw.references.MyNotification;
+import tw.references.MyOperateState;
 import tw.references.MyPreference;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,8 +27,7 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity {
 
-	public static final String TAG = "`NCKU_WIFI_LOGIN";
-	public static final Boolean D=false;
+	public static final String TAG = "`MainActivity";
 	
 	public static final int MENU_ABOUT=0;
 	
@@ -38,7 +36,6 @@ public class MainActivity extends Activity {
 
 	private MyNotification mNotif;
 	private MyPreference mPref;
-	private MyConnectHttp mConnectHttp;	
 	
 	private EditText eAccount;
 	private EditText ePassword;
@@ -96,7 +93,6 @@ public class MainActivity extends Activity {
 	private void init(){
 		mPref=new MyPreference(this);
 		mNotif=new MyNotification(this);
-		mConnectHttp=new MyConnectHttp(this);
 		
 		eAccount = (EditText) findViewById(R.id.account);
 		ePassword = (EditText) findViewById(R.id.password);
@@ -117,9 +113,7 @@ public class MainActivity extends Activity {
 		bLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 //				storePREF();
-				if (!mConnectHttp.getWiFiState() ) 
-					mConnectHttp.setWiFiState(true);
-				
+				if(!MyOperateState.ToWifiService) startService(new Intent(MainActivity.this, ToWifiService.class));
 				finish();
 				startService(new Intent(MainActivity.this, ToLoginService.class));
 			}
@@ -200,13 +194,13 @@ public class MainActivity extends Activity {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-    	if(D) Log.i(TAG,"----------onCreateOptionsMenu()----------");
+    	if(MyOperateState.D) Log.i(TAG,"----------onCreateOptionsMenu()----------");
     	menu.add(0,MENU_ABOUT,0,R.string.about).setIcon(android.R.drawable.ic_menu_edit);
         return true;
     }
     
     public boolean onOptionsItemSelected(MenuItem item){
-    	if(D) Log.i(TAG,"----------onOptionsItemSelected()----------");
+    	if(MyOperateState.D) Log.i(TAG,"----------onOptionsItemSelected()----------");
 		
     	switch(item.getItemId() ){
     		case MENU_ABOUT:

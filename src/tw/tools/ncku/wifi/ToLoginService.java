@@ -1,12 +1,12 @@
 package tw.tools.ncku.wifi;
 
-import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
-import tw.parameters.PararmeterValue;
+import tw.parameters.SchoolCheck;
 import tw.references.MyConnectHttp;
 import tw.references.MyNotification;
+import tw.references.MyOperateState;
 import tw.references.MyPreference;
 import tw.references.ToListenWifiOffService;
 
@@ -40,16 +40,18 @@ public class ToLoginService extends Service {
 	public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         Log.i(TAG,"+++++++++++ON START+++++++++++");
-        if(MainActivity.D) Toast.makeText(this, "LOGIN SERVICE ONSTART", Toast.LENGTH_SHORT).show();
+        MyOperateState.ToLoginService=true;
+        
+        if(MyOperateState.D) Toast.makeText(this, "LOGIN SERVICE ONSTART", Toast.LENGTH_SHORT).show();
         
         initSetting();
         
         if(mConnectHttp.getConnectState()){
-        	Log.i(TAG, "connected");
+        	Log.i(TAG, "wifi connected");
         	sendLogIn();
         }
         else{
-        	Log.i(TAG, "not connected");
+        	Log.i(TAG, "wifi not connected");
         	registerReceiver(toLoginReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         	onToLoginReceiver=true;
         }
@@ -60,8 +62,9 @@ public class ToLoginService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"+++++++++++ON DESTROY+++++++++++");
+        MyOperateState.ToLoginService=false;
         
-        if(MainActivity.D) Toast.makeText(this, "LOGIN SERVICE DESTROY", Toast.LENGTH_SHORT).show();
+        if(MyOperateState.D) Toast.makeText(this, "LOGIN SERVICE DESTROY", Toast.LENGTH_SHORT).show();
         
         if(onToLoginReceiver){
         	unregisterReceiver(toLoginReceiver);
@@ -86,76 +89,104 @@ public class ToLoginService extends Service {
 		new Thread(new Runnable() {
 			public void run() {
 				
-				SharedPreferences settings = getSharedPreferences(MyPreference.PREF, 0);
-				String account = settings.getString(MyPreference.PREF_ACCOUNT, null);
-				String password = settings.getString(MyPreference.PREF_PASSWORD, null);
-
-				List<NameValuePair> dataPairs = PararmeterValue.getLoginDataPair(account, password);
+				String loginResult="";
+				String confirmResult="";
 				
-				final String result = mConnectHttp.post_url_contents(PararmeterValue.loginHttps, dataPairs);
-				final String sresult = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);/*can modify*/
+				if(MyOperateState.TANET){
+					Log.i(TAG,"SCHOOL:"+SchoolCheck.school.name);
+					SharedPreferences settings = getSharedPreferences(MyPreference.PREF, 0);
+					String account = settings.getString(MyPreference.PREF_ACCOUNT, null);
+					String password = settings.getString(MyPreference.PREF_PASSWORD, null);
+					SchoolCheck.school.LoginDataPair.add(new BasicNameValuePair(SchoolCheck.school.accountPara, account));
+					SchoolCheck.school.LoginDataPair.add(new BasicNameValuePair(SchoolCheck.school.passwordPara, password));
+					loginResult = mConnectHttp.post_url_contents(SchoolCheck.school.loginHttps, SchoolCheck.school.LoginDataPair);
+					Log.i(TAG, "loginResult"+loginResult);
+				}
+				confirmResult = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);
 				
-//				Log.i(TAG,""+result);
-//				Log.i(TAG,""+sresult);
-				mHandler.post(new Runnable(){
-    				public void run(){
-    					if(result!=null && result.indexOf( PararmeterValue.loginAppearValue ) != -1) {
-    						if(MainActivity.D) Toast.makeText(ToLoginService.this, "Login Success", Toast.LENGTH_LONG).show();
-    						if(MainActivity.D) Log.i(TAG, "Login Success");
-    						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
-    						mNotif.setNotifAutoLogin(false);
-    						
-    						startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
-    						stopSelf();
-    						
-    						
-    					} 
-    					else {
-    						if(sresult!=null && sresult.indexOf( MyConnectHttp.comfirmAppearValue ) != -1) {
-    							if(MainActivity.D) Toast.makeText(ToLoginService.this, "Already Connected", Toast.LENGTH_LONG).show();
-    							if(MainActivity.D) Log.i(TAG, "Already Connected");
-    							mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
-    							mNotif.setNotifAutoLogin(false);
-    							
-    							startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
-    							stopSelf();
-    						}else {
-    							Toast.makeText(ToLoginService.this, "Login Failed", Toast.LENGTH_LONG).show();
-    							Log.i(TAG, "Login Failed");
-    							mNotif.setNotif(MyNotification.NOTIF_CANCEL);
-    							mNotif.setNotifAutoLogin(false);
-    							stopSelf();
-    						}
-    					}				
-    					
-    				} 
-    			});
-			
 				
+				if(loginResult.indexOf( SchoolCheck.school.loginAppearValue ) != -1){
+					Log.i(TAG, "Login Success");
+					mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
+					mNotif.setNotifAutoLogin(false);	
+					startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
+					stopSelf();
+				}
+				else if(confirmResult.indexOf( MyConnectHttp.comfirmAppearValue ) != -1){
+					Log.i(TAG, "Already Connected");
+					mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
+					mNotif.setNotifAutoLogin(false);
+					
+					startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
+					stopSelf();	
+				}
+				else{
+					Log.i(TAG, "Login Failed");
+					mNotif.setNotif(MyNotification.NOTIF_CANCEL);
+					mNotif.setNotifAutoLogin(false);
+					stopSelf();
+					
+					mHandler.post(new Runnable(){
+						public void run(){
+							Toast.makeText(ToLoginService.this, "Login Failed", Toast.LENGTH_LONG).show();
+						}
+					});
+				}
+				
+//				if(MyOperateState.TANET){
+//					String result = mConnectHttp.post_url_contents(SchoolCheck.school.loginHttps, SchoolCheck.school.LoginDataPair);
+//					if(result!=null && result.indexOf( SchoolCheck.school.loginAppearValue ) != -1){
+//						Log.i(TAG, "Login Success");
+//						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
+//						mNotif.setNotifAutoLogin(false);	
+//						startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
+//						stopSelf();
+//					}
+//				}
+//				else{
+//					String result = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);
+//					if(result!=null && result.indexOf( MyConnectHttp.comfirmAppearValue ) != -1) {
+//						Log.i(TAG, "Already Connected");
+//						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
+//						mNotif.setNotifAutoLogin(false);
+//						
+//						startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
+//						stopSelf();
+//					}
+//					else{
+//						Log.i(TAG, "Login Failed");
+//						mNotif.setNotif(MyNotification.NOTIF_CANCEL);
+//						mNotif.setNotifAutoLogin(false);
+//						stopSelf();
+//						
+//						mHandler.post(new Runnable(){
+//							public void run(){
+//								Toast.makeText(ToLoginService.this, "Login Failed", Toast.LENGTH_LONG).show();
+//							}
+//						});
+//					}		
+//				}
 			}
 		}).start();
-
 	}	
 	
 	
 	class ToLoginReceiver extends BroadcastReceiver {
 		public void onReceive(Context context, Intent intent) {
 			Log.i(TAG, "----------ToLoginReceiver----------");
-			if(MainActivity.D) Toast.makeText(ToLoginService.this, "ToLoginReceiver",Toast.LENGTH_SHORT).show();
+			if(MyOperateState.D) Toast.makeText(ToLoginService.this, "ToLoginReceiver",Toast.LENGTH_SHORT).show();
 			
 			if (!mConnectHttp.getConnectState() ) {
-				if(MainActivity.D) Toast.makeText(ToLoginService.this, "YET NO INTERNET",Toast.LENGTH_SHORT).show();
-				if(MainActivity.D) Log.i(TAG, "YET NO INTERNET");
+				if(MyOperateState.D) Toast.makeText(ToLoginService.this, "YET NO INTERNET",Toast.LENGTH_SHORT).show();
+				if(MyOperateState.D) Log.i(TAG, "YET NO INTERNET");
 			}
 			else{
-				if(MainActivity.D) Toast.makeText(ToLoginService.this, "TRY CONNECT TO NCKU WIFI",Toast.LENGTH_SHORT).show();
-				if(MainActivity.D) Log.i(TAG, "TRY CONNECT TO NCKU WIFI");
+				if(MyOperateState.D) Toast.makeText(ToLoginService.this, "TRY CONNECT TO NCKU WIFI",Toast.LENGTH_SHORT).show();
+				if(MyOperateState.D) Log.i(TAG, "TRY CONNECT TO NCKU WIFI");
 				sendLogIn();
 				unregisterReceiver(toLoginReceiver);
 				onToLoginReceiver=false;
 			}
-			
-
 		}
 	}
     
