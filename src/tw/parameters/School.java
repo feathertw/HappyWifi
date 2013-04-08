@@ -8,6 +8,7 @@ import org.apache.http.NameValuePair;
 public class School {
 	
 	public String name;
+	public String mail;
 	public List<String> ssid= new ArrayList<String>();
 	public String loginHttps;
 	public String logoutHttps;

@@ -19,7 +19,8 @@ public class SchoolCheck {
 		
 		for(School s : schoolList){
 			for(String ssid : s.ssid){
-				if(SSID.equals(ssid))	return s;
+//				if(SSID.equals(ssid))	return s;
+				if(SSID.indexOf(ssid)!=-1)	return s;
 			}
 		}
 		return null;
