@@ -10,16 +10,20 @@ import tw.references.MyOperateState;
 import tw.references.MyPreference;
 import tw.references.ToListenWifiOffService;
 
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 public class ToLoginService extends Service {
@@ -49,7 +53,7 @@ public class ToLoginService extends Service {
         
         if(mConnectHttp.getConnectState()){
         	Log.i(TAG, "wifi connected");
-        	sendLogIn();
+        	preSendLogIn();
         }
         else{
         	Log.i(TAG, "wifi not connected");
@@ -83,7 +87,37 @@ public class ToLoginService extends Service {
         
         mNotif.setNotif(MyNotification.NOTIF_LOGIN);
 	}
-	
+	private void preSendLogIn(){
+		if(!MyOperateState.TANET){
+			final SchoolCheck schooCheck=new SchoolCheck();
+			final String itemName[] = schooCheck.getSchoolName();
+//			final String itemMail[] = schooCheck.getSchoolMail();
+			
+			AlertDialog.Builder dSelectLoginSchool = new AlertDialog.Builder(ToLoginService.this);
+			dSelectLoginSchool.setItems(itemName,new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,final int which) {
+					SchoolCheck.school=schooCheck.getSelectShool(itemName[which]);
+					if(SchoolCheck.school!=null){
+						MyOperateState.TANET=true;
+						sendLogIn();
+					}
+				}
+			});
+			dSelectLoginSchool.setCancelable(true);
+			dSelectLoginSchool.setOnCancelListener(new OnCancelListener(){
+				public void onCancel(DialogInterface dialog){
+					sendLogIn();
+				}
+			});
+			AlertDialog alert = dSelectLoginSchool.create();
+			alert.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+			alert.show();	
+		}
+		else{
+			sendLogIn();
+		}
+		
+	}
 	private void sendLogIn(){
 		Log.i(TAG, "----------sendLogIn()----------");
 		
@@ -199,7 +233,7 @@ public class ToLoginService extends Service {
 			else{
 				if(MyOperateState.D) Toast.makeText(ToLoginService.this, "TRY CONNECT TO NCKU WIFI",Toast.LENGTH_SHORT).show();
 				if(MyOperateState.D) Log.i(TAG, "TRY CONNECT TO NCKU WIFI");
-				sendLogIn();
+				preSendLogIn();
 				unregisterReceiver(toLoginReceiver);
 				onToLoginReceiver=false;
 			}

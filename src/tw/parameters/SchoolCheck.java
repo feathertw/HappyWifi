@@ -25,6 +25,12 @@ public class SchoolCheck {
 		}
 		return null;
 	}
+	public School getSelectShool(String NAME){
+		for(School s : schoolList){
+			if(NAME.equals(s.name))	return s;
+		}
+		return null;
+	}
 	
 	public String[] getSchoolName(){
 		int size=schoolList.size();
