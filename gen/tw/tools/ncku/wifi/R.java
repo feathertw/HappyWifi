@@ -24,13 +24,15 @@ public final class R {
         public static final int wifi_on=0x7f020005;
     }
     public static final class id {
-        public static final int account=0x7f070001;
-        public static final int cAutoLogin=0x7f070007;
-        public static final int cAutoWifi=0x7f070006;
-        public static final int login=0x7f070003;
-        public static final int password=0x7f070002;
-        public static final int setting=0x7f070004;
-        public static final int textView1=0x7f070005;
+        public static final int account=0x7f070002;
+        public static final int cAutoLogin=0x7f070008;
+        public static final int cAutoWifi=0x7f070007;
+        public static final int cMailType=0x7f070009;
+        public static final int login=0x7f070004;
+        public static final int mail_type=0x7f070001;
+        public static final int password=0x7f070003;
+        public static final int setting=0x7f070005;
+        public static final int textView1=0x7f070006;
         public static final int textView2=0x7f070000;
     }
     public static final class layout {
@@ -39,10 +41,10 @@ public final class R {
     }
     public static final class string {
         public static final int SETTING=0x7f050002;
-        public static final int about=0x7f050009;
-        public static final int about_close=0x7f05000a;
-        public static final int about_comment=0x7f05000b;
-        public static final int about_content=0x7f05000c;
+        public static final int about=0x7f05000a;
+        public static final int about_close=0x7f05000b;
+        public static final int about_comment=0x7f05000c;
+        public static final int about_content=0x7f05000d;
         public static final int app_name=0x7f050000;
         public static final int button_login=0x7f050005;
         public static final int button_setting=0x7f050006;
@@ -50,6 +52,7 @@ public final class R {
         public static final int edit_hint_password=0x7f050004;
         public static final int setting_auto_login=0x7f050008;
         public static final int setting_auto_wifi=0x7f050007;
+        public static final int setting_select_School=0x7f050009;
         public static final int title_activity_main=0x7f050001;
     }
     public static final class style {
