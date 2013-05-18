@@ -9,7 +9,8 @@
     <string name="button_login">Login</string>
     <string name="button_setting">setting</string>
     <string name="setting_auto_wifi">Auto to Open Wifi</string>
-    <string name="setting_auto_login">Auto to Login NCKU</string>
+    <string name="setting_auto_login">Auto to Login Wifi</string>
+    <string name="setting_select_School">Select School Mail Type</string> 
     
     <string name="about">ABOUT</string>
     <string name="about_close">Close</string>
@@ -25,6 +26,7 @@
         	\n*cancel auto login in state bar
         	\n*cancel operation in state bar 
         	\n*logout, close wifi in state bar
-    </string>    
+    </string>
+       
     
 </resources>

@@ -25,6 +25,23 @@ public class SchoolCheck {
 		}
 		return null;
 	}
+	
+	public String[] getSchoolName(){
+		int size=schoolList.size();
+		String item[]=new String[size];
+		for(int i=0;i<size;i++){
+			item[i]=schoolList.get(i).name;
+		}
+		return item;
+	}
+	public String[] getSchoolMail(){
+		int size=schoolList.size();
+		String item[]=new String[size];
+		for(int i=0;i<size;i++){
+			item[i]=schoolList.get(i).mail;
+		}
+		return item;
+	}
 }
 
 

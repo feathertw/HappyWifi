@@ -30,6 +30,7 @@ public class ToLoginService extends Service {
 	
 	public static final String TAG = "`TO_LOGIN_SERVICE";
 
+	private MyPreference mPref;
 	private MyNotification mNotif;
 	private MyConnectHttp mConnectHttp;
 	private ToLoginReceiver toLoginReceiver;
@@ -75,6 +76,7 @@ public class ToLoginService extends Service {
 	
 	private void initSetting(){
 		Log.i(TAG, "----------initSetting()----------");
+		mPref=new MyPreference(this);
 		mConnectHttp=new MyConnectHttp(this);
 		mNotif=new MyNotification(this);
         toLoginReceiver=new ToLoginReceiver();
@@ -97,6 +99,14 @@ public class ToLoginService extends Service {
 					SharedPreferences settings = getSharedPreferences(MyPreference.PREF, 0);
 					String account = settings.getString(MyPreference.PREF_ACCOUNT, null);
 					String password = settings.getString(MyPreference.PREF_PASSWORD, null);
+					
+					boolean switchSelectMailType = mPref.getBoolean(MyPreference.PREF_SWITCH_SELECTMAILTYPE, false);
+					if(switchSelectMailType){
+						String selectMailType = mPref.getString(MyPreference.PREF_SELECT_MAIL_TYPE, "");
+						account=account+selectMailType;
+					}
+					Log.i("xxxxxx",account);
+					
 					SchoolCheck.school.LoginDataPair.add(new BasicNameValuePair(SchoolCheck.school.accountPara, account));
 					SchoolCheck.school.LoginDataPair.add(new BasicNameValuePair(SchoolCheck.school.passwordPara, password));
 					loginResult = mConnectHttp.post_url_contents(SchoolCheck.school.loginHttps, SchoolCheck.school.LoginDataPair);

@@ -1,5 +1,6 @@
 package tw.tools.ncku.wifi;
 
+import tw.parameters.SchoolCheck;
 import tw.references.MyNotification;
 import tw.references.MyOperateState;
 import tw.references.MyPreference;
@@ -24,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -33,6 +35,7 @@ public class MainActivity extends Activity {
 	
 	private boolean switchAutoWifi;
 	private boolean switchAutoLogin;
+	private boolean switchSelectMailType;
 
 	private MyNotification mNotif;
 	private MyPreference mPref;
@@ -41,6 +44,7 @@ public class MainActivity extends Activity {
 	private EditText ePassword;
 	private Button bLogin;
 	private Button bSetting;
+	private TextView tMailType;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,6 +102,7 @@ public class MainActivity extends Activity {
 		ePassword = (EditText) findViewById(R.id.password);
 		bLogin = (Button) findViewById(R.id.login);
 		bSetting = (Button) findViewById(R.id.setting);
+		tMailType = (TextView) findViewById(R.id.mail_type);
 		
 	}
 	
@@ -106,6 +111,12 @@ public class MainActivity extends Activity {
 		
 		switchAutoWifi=mPref.getBoolean(MyPreference.PREF_SWITCH_AUTOWIFI,true);
 		switchAutoLogin=mPref.getBoolean(MyPreference.PREF_SWITCH_AUTOLOGIN,false);
+		switchSelectMailType=mPref.getBoolean(MyPreference.PREF_SWITCH_SELECTMAILTYPE,false);
+		
+		if(switchSelectMailType){
+			String name=mPref.getString(MyPreference.PREF_SELECT_MAIL_SHOOL_NAME, "XXX");
+			tMailType.setText("@"+name);
+		}
 
 		bLogin.getBackground().setAlpha(60);
 		bSetting.getBackground().setAlpha(60);
@@ -140,10 +151,14 @@ public class MainActivity extends Activity {
     			
     			final CheckBox cAutoWifi=(CheckBox)dialog.findViewById(R.id.cAutoWifi);
     			final CheckBox cAutoLogin=(CheckBox)dialog.findViewById(R.id.cAutoLogin);
-    			if(switchAutoWifi)	cAutoWifi.setChecked(true);
-    			else				cAutoWifi.setChecked(false);
-    			if(switchAutoLogin)	cAutoLogin.setChecked(true);
-    			else				cAutoLogin.setChecked(false);
+    			final CheckBox cMailType=(CheckBox)dialog.findViewById(R.id.cMailType);
+    			
+    			if(switchAutoWifi)			cAutoWifi.setChecked(true);
+    			else						cAutoWifi.setChecked(false);
+    			if(switchAutoLogin)			cAutoLogin.setChecked(true);
+    			else						cAutoLogin.setChecked(false);
+    			if(switchSelectMailType)	cMailType.setChecked(true);
+    			else						cMailType.setChecked(false);
     			
     			if(!switchAutoWifi)	cAutoLogin.setEnabled(false);
     			cAutoWifi.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -166,6 +181,47 @@ public class MainActivity extends Activity {
     				public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
     					switchAutoLogin=isChecked;
     					mPref.setBoolean(MyPreference.PREF_SWITCH_AUTOLOGIN, switchAutoLogin);
+    				}
+    			});
+    			cMailType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+    				public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+    					
+    					if(isChecked){
+    						SchoolCheck schooCheck=new SchoolCheck();
+    						final String itemName[] = schooCheck.getSchoolName();
+    						final String itemMail[] = schooCheck.getSchoolMail();
+    						
+        					AlertDialog.Builder dSelectMailType = new AlertDialog.Builder(MainActivity.this);
+        					dSelectMailType.setItems(itemMail,new DialogInterface.OnClickListener() {
+        						public void onClick(DialogInterface dialog,final int which) {
+        							tMailType.setText("@"+itemName[which]);
+        							switchSelectMailType=true;
+        							mPref.setBoolean(MyPreference.PREF_SWITCH_SELECTMAILTYPE, switchSelectMailType);
+        							mPref.setString(MyPreference.PREF_SELECT_MAIL_SHOOL_NAME, itemName[which]);
+        							mPref.setString(MyPreference.PREF_SELECT_MAIL_TYPE, itemMail[which]);
+        						}
+        					});
+        					dSelectMailType.setCancelable(true);
+        					dSelectMailType.setOnCancelListener(new OnCancelListener(){
+        						public void onCancel(DialogInterface dialog){
+        							tMailType.setText("");
+            						switchSelectMailType=false;
+            						mPref.setBoolean(MyPreference.PREF_SWITCH_SELECTMAILTYPE, switchSelectMailType);
+            						mPref.setString(MyPreference.PREF_SELECT_MAIL_SHOOL_NAME, "");
+            						mPref.setString(MyPreference.PREF_SELECT_MAIL_TYPE, "");
+            						cMailType.setChecked(false);
+        						}
+        					});
+        					dSelectMailType.show();	
+    					}
+    					else{
+    						tMailType.setText("");
+    						switchSelectMailType=false;
+    						mPref.setBoolean(MyPreference.PREF_SWITCH_SELECTMAILTYPE, switchSelectMailType);
+    						mPref.setString(MyPreference.PREF_SELECT_MAIL_SHOOL_NAME, "");
+    						mPref.setString(MyPreference.PREF_SELECT_MAIL_TYPE, "");
+    						cMailType.setChecked(false);
+    					}
     				}
     			});
 			}
