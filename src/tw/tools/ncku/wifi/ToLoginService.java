@@ -91,7 +91,7 @@ public class ToLoginService extends Service {
 				
 				String loginResult="";
 				String confirmResult="";
-				
+				Log.i("#####","TANET:"+MyOperateState.TANET);
 				if(MyOperateState.TANET){
 					Log.i(TAG,"SCHOOL:"+SchoolCheck.school.name);
 					SharedPreferences settings = getSharedPreferences(MyPreference.PREF, 0);
@@ -104,35 +104,41 @@ public class ToLoginService extends Service {
 				}
 				confirmResult = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);
 				
-				
-				if(loginResult.indexOf( SchoolCheck.school.loginAppearValue ) != -1){
-					Log.i(TAG, "Login Success");
-					mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
-					mNotif.setNotifAutoLogin(false);	
-					startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
-					stopSelf();
+				boolean tanet_login=false;
+				if(MyOperateState.TANET){
+					if(loginResult.indexOf( SchoolCheck.school.loginAppearValue ) != -1){
+						Log.i(TAG, "Login Success");
+						
+						tanet_login=true;
+						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
+						mNotif.setNotifAutoLogin(false);	
+						startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
+						stopSelf();
+					}
 				}
-				else if(confirmResult.indexOf( MyConnectHttp.comfirmAppearValue ) != -1){
-					Log.i(TAG, "Already Connected");
-					mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
-					mNotif.setNotifAutoLogin(false);
-					
-					startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
-					stopSelf();	
+				if(!tanet_login){
+					if(confirmResult.indexOf( MyConnectHttp.comfirmAppearValue ) != -1){
+						Log.i(TAG, "Already Connected");
+						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
+						mNotif.setNotifAutoLogin(false);
+						
+						startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
+						stopSelf();	
+					}
+					else{
+						Log.i(TAG, "Login Failed");
+						mNotif.setNotif(MyNotification.NOTIF_CANCEL);
+						mNotif.setNotifAutoLogin(false);
+						stopSelf();
+						
+						mHandler.post(new Runnable(){
+							public void run(){
+								Toast.makeText(ToLoginService.this, "Login Failed", Toast.LENGTH_LONG).show();
+							}
+						});
+					}					
 				}
-				else{
-					Log.i(TAG, "Login Failed");
-					mNotif.setNotif(MyNotification.NOTIF_CANCEL);
-					mNotif.setNotifAutoLogin(false);
-					stopSelf();
-					
-					mHandler.post(new Runnable(){
-						public void run(){
-							Toast.makeText(ToLoginService.this, "Login Failed", Toast.LENGTH_LONG).show();
-						}
-					});
-				}
-				
+				Log.i("#####","check finish");
 //				if(MyOperateState.TANET){
 //					String result = mConnectHttp.post_url_contents(SchoolCheck.school.loginHttps, SchoolCheck.school.LoginDataPair);
 //					if(result!=null && result.indexOf( SchoolCheck.school.loginAppearValue ) != -1){

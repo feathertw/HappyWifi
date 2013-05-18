@@ -1,6 +1,6 @@
 <resources>
     
-    <string name="app_name">NCKU HAPPY WIFI v1.0</string>
+    <string name="app_name">NCKU HAPPY WIFI v2.0</string>
     <string name="title_activity_main">HappyWiFi</string>
     
     <string name="SETTING">SETTING</string>
@@ -15,7 +15,10 @@
     <string name="about_close">Close</string>
     <string name="about_comment">Comment</string>
     <string name="about_content">
-        	version 1.0
+        	version 2.0
+        	\nadd NUTN, STUST login
+        	\n
+        	\nversion 1.0
         	\n*memorize account, password
         	\n*auto to open wifi system
         	\n*auto to login NCKU wifi

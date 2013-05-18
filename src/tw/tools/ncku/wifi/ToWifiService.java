@@ -104,14 +104,92 @@ public class ToWifiService extends Service {
 		Log.i(TAG, "----------setChooseOrBulidSSID()----------");
 		
 //		String networkSSID = PararmeterValue.WIFI_SSID;
-		String networkSSID = null;
-		List<ScanResult> wifiScanlist=mConnectHttp.getWifiScanResult();
-		
 		
 //		SharedPreferences settings = getSharedPreferences(MyPreference.PREF, 0);
 //		String account = settings.getString(MyPreference.PREF_ACCOUNT, null);
 //		String password = settings.getString(MyPreference.PREF_PASSWORD, null);
-//		SchoolCheck schooCheck=new SchoolCheck(account,password);
+//		SchoolCheck schooCheck=new SchoolCheck(account,password);		
+		
+		
+		
+		
+
+		String networkSSID = null;
+		SchoolCheck schooCheck=new SchoolCheck();
+		
+		int networkId = -1;
+		boolean bConfigured=false;
+		boolean bTanet=false;
+		
+		boolean bConnected = mConnectHttp.getConnectState();
+		if(bConnected){
+			Log.i("#####","there connnected wifi");
+			
+			String ssid = mConnectHttp.getCurrentWifiSSID();
+			SchoolCheck.school=schooCheck.getKey(ssid);
+			if(SchoolCheck.school!=null){
+				networkSSID=ssid;
+				bTanet=true;
+			}
+		}
+		else{
+			Log.i("#####","no connnected wifi");
+			List<ScanResult> wifiScanlist=mConnectHttp.getWifiScanResult();
+			List<WifiConfiguration> wifiConfiguredList=mConnectHttp.getConfiguredNetworksList();
+			
+			for(ScanResult s : wifiScanlist) {
+				if(MyOperateState.D) Log.i("xxxxx","Wifi ssid:"+s.SSID+" level:"+s.level);
+				
+				networkId = mConnectHttp.matchConfiguredNetworks(s.SSID,wifiConfiguredList);
+				if(networkId!=-1)	bConfigured=true;
+				
+				SchoolCheck.school=schooCheck.getKey(s.SSID);
+				if(SchoolCheck.school!=null){
+					networkSSID=s.SSID;
+					bTanet=true;
+					break;
+				}
+				
+				if(bConfigured) break;
+			}
+		}
+		
+		if(bTanet){
+			MyOperateState.TANET=true;
+			
+			if(!bConnected){
+				if(bConfigured){
+					mConnectHttp.setWifiNetworkId(networkId);
+				}
+				else if(!bConfigured){
+//					mConnectHttp.setNewNetwork(networkSSID);
+					networkId = mConnectHttp.setNewNetwork(networkSSID);
+					mConnectHttp.setWifiNetworkId(networkId);
+				}
+			}
+		}
+		else{
+			MyOperateState.TANET=false;
+			Log.i(TAG,"NOT CHOOSE TANET WIFI");
+			Toast.makeText(this, "NO TANET WIFI", Toast.LENGTH_SHORT).show();
+		}
+		
+//		
+//		if(bConfigured && bTanet){
+//			mConnectHttp.setWifiNetworkId(networkId);
+//		}
+//		else if((!bConfigured) && bTanet){
+//			networkId = mConnectHttp.setNewNetwork(networkSSID);
+//			mConnectHttp.setWifiNetworkId(networkId);
+//		}
+//		else{
+//			Log.i(TAG,"NO TANET WIFI");
+//			Toast.makeText(this, "NO TANET WIFI", Toast.LENGTH_SHORT).show();
+//			MyOperateState.TANET=false;
+//			stopSelf();
+//		}
+		
+/*		
 		SchoolCheck schooCheck=new SchoolCheck();
 		
 		for(ScanResult s : wifiScanlist) {
@@ -172,15 +250,22 @@ public class ToWifiService extends Service {
 				wifiManager.reconnect();
 			}
 			
-			/*need reconnect?*/
+			//need reconnect?
 		}
 //		try {
 //			Thread.sleep(6000);
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
+*/
+//		int networkId = -1;
+//		boolean bConfigured=false;
+//		boolean bTanet=false;
+		Log.i(TAG, "networdId:"+networkId+" bConfigured:"+bConfigured+" bTanet:"+bTanet);
 		Log.i(TAG,"setCheckOrBulidSSID() complete");
 	}
+	
+
 	
 	class ToWifiReceiver extends BroadcastReceiver {
 		public void onReceive(Context context, Intent intent) {

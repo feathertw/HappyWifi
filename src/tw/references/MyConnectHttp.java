@@ -17,6 +17,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
@@ -80,11 +81,69 @@ public class MyConnectHttp {
 		
 		return wifiInfo.getSSID();
 	}
+
+	public String getCurrentWifiSSID(){
+		WifiManager wifiManager=(WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		
+		return wifiManager.getConnectionInfo().getSSID();
+	}
 	
 	public List<ScanResult> getWifiScanResult(){
 		WifiManager wifiManager=(WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		
 		return wifiManager.getScanResults();
+	}
+	
+	public void setWifiNetworkId(int networkId){
+		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		wifiManager.disconnect();
+		wifiManager.enableNetwork(networkId, true);
+		wifiManager.reconnect();
+	}
+	
+	public int setNewNetwork(String networkSSID){
+		
+		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		
+		WifiConfiguration wfc = new WifiConfiguration();
+		wfc.SSID = "\"".concat(networkSSID).concat("\"");
+		wfc.status = WifiConfiguration.Status.DISABLED;
+		wfc.priority = 40;
+
+		wfc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+		wfc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+		wfc.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+		wfc.allowedAuthAlgorithms.clear();
+		wfc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+		wfc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+		wfc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+		wfc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+		wfc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+		wfc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+		
+		int wcgID = wifiManager.addNetwork(wfc);
+		wifiManager.saveConfiguration();
+		return wcgID;
+//		wifiManager.enableNetwork(wcgID, true);
+//		wifiManager.disconnect();
+//		wifiManager.reconnect();
+	}
+	
+	public List<WifiConfiguration> getConfiguredNetworksList(){
+		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		return wifiManager.getConfiguredNetworks();	
+	}
+	
+	public int matchConfiguredNetworks(String SSID, List<WifiConfiguration> list){
+		
+		int networkId=-1;
+		for (WifiConfiguration i : list) {
+			if(MyOperateState.D) System.out.println("SSID:" + i.SSID + "networkId:"+ i.networkId);
+			if (i.SSID != null&& i.SSID.equals("\"" + SSID + "\"")) {
+				return i.networkId;
+			}
+		}		
+		return networkId;
 	}
 	
 	public String get_http_data(String url) {
