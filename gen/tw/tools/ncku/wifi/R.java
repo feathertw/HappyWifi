@@ -24,6 +24,7 @@ public final class R {
         public static final int wifi_on=0x7f020005;
     }
     public static final class id {
+        public static final int ListView=0x7f07000a;
         public static final int account=0x7f070002;
         public static final int cAutoLogin=0x7f070008;
         public static final int cAutoWifi=0x7f070007;
@@ -38,6 +39,7 @@ public final class R {
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int custom_dialog=0x7f030001;
+        public static final int custom_listview=0x7f030002;
     }
     public static final class string {
         public static final int SETTING=0x7f050002;

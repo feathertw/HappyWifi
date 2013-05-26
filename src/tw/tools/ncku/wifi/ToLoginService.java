@@ -23,8 +23,14 @@ import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class ToLoginService extends Service {
 	
@@ -94,14 +100,25 @@ public class ToLoginService extends Service {
 //			final String itemMail[] = schooCheck.getSchoolMail();
 			
 			AlertDialog.Builder dSelectLoginSchool = new AlertDialog.Builder(ToLoginService.this);
-			dSelectLoginSchool.setItems(itemName,new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog,final int which) {
+			LayoutInflater inflater = LayoutInflater.from(ToLoginService.this);
+			View layout = inflater.inflate(R.layout.custom_listview,null);
+			dSelectLoginSchool.setView(layout);
+	
+			final AlertDialog alert = dSelectLoginSchool.create();
+			alert.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+			alert.show();				
+			
+			ListView listView=(ListView)layout.findViewById(R.id.ListView);	
+			listView.setAdapter(new ArrayAdapter<Object>(ToLoginService.this,android.R.layout.simple_list_item_1,itemName)); 
+			listView.setOnItemClickListener(new OnItemClickListener(){  
+				public void onItemClick(AdapterView<?> arg0,View arg1, int which, long arg3) {
 					SchoolCheck.school=schooCheck.getSelectShool(itemName[which]);
 					if(SchoolCheck.school!=null){
 						MyOperateState.TANET=true;
 						sendLogIn();
 					}
-				}
+					alert.dismiss();
+				}  
 			});
 			dSelectLoginSchool.setCancelable(true);
 			dSelectLoginSchool.setOnCancelListener(new OnCancelListener(){
@@ -109,9 +126,6 @@ public class ToLoginService extends Service {
 					sendLogIn();
 				}
 			});
-			AlertDialog alert = dSelectLoginSchool.create();
-			alert.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-			alert.show();	
 		}
 		else{
 			sendLogIn();

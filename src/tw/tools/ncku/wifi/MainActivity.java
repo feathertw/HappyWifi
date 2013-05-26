@@ -20,11 +20,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -191,18 +195,26 @@ public class MainActivity extends Activity {
     						final String itemName[] = schooCheck.getSchoolName();
     						final String itemMail[] = schooCheck.getSchoolMail();
     						
-        					AlertDialog.Builder dSelectMailType = new AlertDialog.Builder(MainActivity.this);
-        					dSelectMailType.setItems(itemMail,new DialogInterface.OnClickListener() {
-        						public void onClick(DialogInterface dialog,final int which) {
+    		    			final Dialog dialog =new Dialog(MainActivity.this);
+    		    			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    		    			dialog.setCanceledOnTouchOutside(true);
+    		    			dialog.setContentView(R.layout.custom_listview);
+    		    			
+    		    			ListView listView=(ListView)dialog.findViewById(R.id.ListView);	
+    		    			listView.setAdapter(new ArrayAdapter<Object>(MainActivity.this,android.R.layout.simple_list_item_1,itemMail)); 
+    		    			listView.setOnItemClickListener(new OnItemClickListener(){  
+								public void onItemClick(AdapterView<?> arg0,View arg1, int which, long arg3) {
         							tMailType.setText("@"+itemName[which]);
         							switchSelectMailType=true;
         							mPref.setBoolean(MyPreference.PREF_SWITCH_SELECTMAILTYPE, switchSelectMailType);
         							mPref.setString(MyPreference.PREF_SELECT_MAIL_SHOOL_NAME, itemName[which]);
-        							mPref.setString(MyPreference.PREF_SELECT_MAIL_TYPE, itemMail[which]);
-        						}
-        					});
-        					dSelectMailType.setCancelable(true);
-        					dSelectMailType.setOnCancelListener(new OnCancelListener(){
+        							mPref.setString(MyPreference.PREF_SELECT_MAIL_TYPE, itemMail[which]);	
+        							dialog.dismiss();  
+								}  
+    		    			});
+    		    			
+        					dialog.setCancelable(true);
+    		    			dialog.setOnCancelListener(new OnCancelListener(){
         						public void onCancel(DialogInterface dialog){
         							tMailType.setText("");
             						switchSelectMailType=false;
@@ -211,8 +223,8 @@ public class MainActivity extends Activity {
             						mPref.setString(MyPreference.PREF_SELECT_MAIL_TYPE, "");
             						cMailType.setChecked(false);
         						}
-        					});
-        					dSelectMailType.show();	
+        					}); 
+    		    			dialog.show();
     					}
     					else{
     						tMailType.setText("");
