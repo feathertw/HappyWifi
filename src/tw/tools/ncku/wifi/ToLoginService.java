@@ -120,8 +120,8 @@ public class ToLoginService extends Service {
 					alert.dismiss();
 				}  
 			});
-			dSelectLoginSchool.setCancelable(true);
-			dSelectLoginSchool.setOnCancelListener(new OnCancelListener(){
+			alert.setCancelable(true);
+			alert.setOnCancelListener(new OnCancelListener(){
 				public void onCancel(DialogInterface dialog){
 					sendLogIn();
 				}
@@ -247,7 +247,7 @@ public class ToLoginService extends Service {
 			else{
 				if(MyOperateState.D) Toast.makeText(ToLoginService.this, "TRY CONNECT TO NCKU WIFI",Toast.LENGTH_SHORT).show();
 				if(MyOperateState.D) Log.i(TAG, "TRY CONNECT TO NCKU WIFI");
-				preSendLogIn();
+				sendLogIn();
 				unregisterReceiver(toLoginReceiver);
 				onToLoginReceiver=false;
 			}
