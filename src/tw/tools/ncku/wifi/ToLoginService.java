@@ -9,16 +9,15 @@ import tw.references.MyNotification;
 import tw.references.MyOperateState;
 import tw.references.MyPreference;
 import tw.references.ToListenWifiOffService;
-
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnCancelListener;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,10 +26,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class ToLoginService extends Service {
 	
@@ -101,7 +101,7 @@ public class ToLoginService extends Service {
 			
 			AlertDialog.Builder dSelectLoginSchool = new AlertDialog.Builder(ToLoginService.this);
 			LayoutInflater inflater = LayoutInflater.from(ToLoginService.this);
-			View layout = inflater.inflate(R.layout.custom_listview,null);
+			View layout = inflater.inflate(R.layout.custom_listview_school,null);
 			dSelectLoginSchool.setView(layout);
 	
 			final AlertDialog alert = dSelectLoginSchool.create();
@@ -120,6 +120,10 @@ public class ToLoginService extends Service {
 					alert.dismiss();
 				}  
 			});
+			TextView tSSID=(TextView)layout.findViewById(R.id.tSSID);
+			String ssid=mConnectHttp.getWifiSSID();
+			tSSID.setText(ssid);
+			
 			alert.setCancelable(true);
 			alert.setOnCancelListener(new OnCancelListener(){
 				public void onCancel(DialogInterface dialog){
@@ -247,7 +251,7 @@ public class ToLoginService extends Service {
 			else{
 				if(MyOperateState.D) Toast.makeText(ToLoginService.this, "TRY CONNECT TO NCKU WIFI",Toast.LENGTH_SHORT).show();
 				if(MyOperateState.D) Log.i(TAG, "TRY CONNECT TO NCKU WIFI");
-				sendLogIn();
+				preSendLogIn();
 				unregisterReceiver(toLoginReceiver);
 				onToLoginReceiver=false;
 			}
