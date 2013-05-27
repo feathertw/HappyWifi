@@ -1,6 +1,6 @@
 <resources>
  
-    <string name="app_name">NCKU HAPPY WIFI v2.0</string>
+    <string name="app_name">NCKU HAPPY WIFI v3.0</string>
     <string name="title_activity_main">HappyWiFi</string>
     
     <string name="SETTING">SETTING</string>
@@ -10,13 +10,18 @@
     <string name="button_setting">setting</string>
     <string name="setting_auto_wifi">Auto to Open Wifi</string>
     <string name="setting_auto_login">Auto to Login NCKU</string>    
+    <string name="setting_select_School">Select School Mail Type</string> 
     
     <string name="about">關於</string>
     <string name="about_close">關閉</string>
-    <string name="about_comment">評價</string>
+    <string name="about_comment">評分</string>
     <string name="about_content">
-        	version 2.0
-        	\n新增南大、南台科大登入
+        	version 3.0
+			\n*可選擇帳號格式
+			\n*可手動選擇登入學校
+			\n
+        	\nversion 2.0
+        	\n*新增南大、南台科大登入
         	\n
         	\nversion 1.0
         	\n*可記憶帳號密碼

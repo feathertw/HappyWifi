@@ -1,6 +1,6 @@
 <resources>
     
-    <string name="app_name">NCKU HAPPY WIFI v2.0</string>
+    <string name="app_name">NCKU HAPPY WIFI v3.0</string>
     <string name="title_activity_main">HappyWiFi</string>
     
     <string name="SETTING">SETTING</string>
@@ -16,7 +16,11 @@
     <string name="about_close">Close</string>
     <string name="about_comment">Comment</string>
     <string name="about_content">
-        	version 2.0
+        	version 3.0
+			\n*optional mail type
+			\n*manual select login school
+			\n
+        	\nversion 2.0
         	\nadd NUTN, STUST login
         	\n
         	\nversion 1.0
