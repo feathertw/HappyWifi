@@ -163,6 +163,7 @@ public class ToLoginService extends Service {
 					SchoolCheck.school.LoginDataPair.add(new BasicNameValuePair(SchoolCheck.school.passwordPara, password));
 					loginResult = mConnectHttp.post_url_contents(SchoolCheck.school.loginHttps, SchoolCheck.school.LoginDataPair);
 					Log.i(TAG, "loginResult"+loginResult);
+					Log.i("IMP", ""+loginResult);
 				}
 				confirmResult = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);
 				

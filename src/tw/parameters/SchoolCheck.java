@@ -11,8 +11,12 @@ public class SchoolCheck {
 	public SchoolCheck(){
 		
 		schoolList.add(NCKU.getSchool());
-		schoolList.add(NUTN.getSchool());	
-		schoolList.add(STUT.getSchool());	
+		schoolList.add(NUTN.getSchool());
+		schoolList.add(STUT.getSchool());
+		schoolList.add(NTU.getSchool());
+//		schoolList.add(NTNU.getSchool());
+		schoolList.add(NTHU.getSchool());
+		schoolList.add(NCTU.getSchool());
 	}
 	
 	public School getKey(String SSID){
