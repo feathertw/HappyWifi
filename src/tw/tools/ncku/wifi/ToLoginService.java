@@ -1,6 +1,5 @@
 package tw.tools.ncku.wifi;
 
-
 import org.apache.http.message.BasicNameValuePair;
 
 import tw.parameters.SchoolCheck;
@@ -94,7 +93,11 @@ public class ToLoginService extends Service {
         mNotif.setNotif(MyNotification.NOTIF_LOGIN);
 	}
 	private void preSendLogIn(){
+		Log.i(TAG, "----------preSendLogIn()----------");
+		
 		if(!MyOperateState.TANET){
+			//check the tanet wifi ssid is not in default list
+			
 			final SchoolCheck schooCheck=new SchoolCheck();
 			final String itemName[] = schooCheck.getSchoolName();
 //			final String itemMail[] = schooCheck.getSchoolMail();
@@ -145,7 +148,7 @@ public class ToLoginService extends Service {
 				
 				String loginResult="";
 				String confirmResult="";
-				Log.i("#####","TANET:"+MyOperateState.TANET);
+				Log.i(TAG,"TANET:"+MyOperateState.TANET);
 				if(MyOperateState.TANET){
 					Log.i(TAG,"SCHOOL:"+SchoolCheck.school.name);
 					SharedPreferences settings = getSharedPreferences(MyPreference.PREF, 0);
@@ -157,13 +160,11 @@ public class ToLoginService extends Service {
 						String selectMailType = mPref.getString(MyPreference.PREF_SELECT_MAIL_TYPE, "");
 						account=account+selectMailType;
 					}
-					Log.i("xxxxxx",account);
 					
 					SchoolCheck.school.LoginDataPair.add(new BasicNameValuePair(SchoolCheck.school.accountPara, account));
 					SchoolCheck.school.LoginDataPair.add(new BasicNameValuePair(SchoolCheck.school.passwordPara, password));
 					loginResult = mConnectHttp.post_url_contents(SchoolCheck.school.loginHttps, SchoolCheck.school.LoginDataPair);
 					Log.i(TAG, "loginResult"+loginResult);
-					Log.i("IMP", ""+loginResult);
 				}
 				confirmResult = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);
 				
@@ -201,40 +202,6 @@ public class ToLoginService extends Service {
 						});
 					}					
 				}
-				Log.i("#####","check finish");
-//				if(MyOperateState.TANET){
-//					String result = mConnectHttp.post_url_contents(SchoolCheck.school.loginHttps, SchoolCheck.school.LoginDataPair);
-//					if(result!=null && result.indexOf( SchoolCheck.school.loginAppearValue ) != -1){
-//						Log.i(TAG, "Login Success");
-//						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
-//						mNotif.setNotifAutoLogin(false);	
-//						startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
-//						stopSelf();
-//					}
-//				}
-//				else{
-//					String result = mConnectHttp.get_http_data(MyConnectHttp.confirmHttps);
-//					if(result!=null && result.indexOf( MyConnectHttp.comfirmAppearValue ) != -1) {
-//						Log.i(TAG, "Already Connected");
-//						mNotif.setNotif(MyNotification.NOTIF_INTO_WIFI);
-//						mNotif.setNotifAutoLogin(false);
-//						
-//						startService(new Intent(ToLoginService.this, ToListenWifiOffService.class));
-//						stopSelf();
-//					}
-//					else{
-//						Log.i(TAG, "Login Failed");
-//						mNotif.setNotif(MyNotification.NOTIF_CANCEL);
-//						mNotif.setNotifAutoLogin(false);
-//						stopSelf();
-//						
-//						mHandler.post(new Runnable(){
-//							public void run(){
-//								Toast.makeText(ToLoginService.this, "Login Failed", Toast.LENGTH_LONG).show();
-//							}
-//						});
-//					}		
-//				}
 			}
 		}).start();
 	}	
