@@ -64,16 +64,6 @@ public class MyConnectHttp {
 		return true;
 	}
 
-//	public Boolean getConnectSpecifyWifi(){
-//		WifiManager wifiManager=(WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-//		WifiInfo wifiInfo= wifiManager.getConnectionInfo();
-//		
-//		String nowWifiSSIF=wifiInfo.getSSID();
-//		if(nowWifiSSIF!=null && nowWifiSSIF.equals(MainActivity.WIFI_SSID) ){
-//			return true;
-//		}	
-//		return false;
-//	}
 	
 	public String getWifiSSID(){
 		WifiManager wifiManager=(WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -158,7 +148,6 @@ public class MyConnectHttp {
 			e.printStackTrace();
 		}
 		return "";
-//		return null;
 	}
 
 	public String post_url_contents(String url, List<NameValuePair> params) {
@@ -176,6 +165,5 @@ public class MyConnectHttp {
 			e.printStackTrace();
 		}
 		return "";
-//		return null;
 	}
 }
