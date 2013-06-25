@@ -70,16 +70,6 @@ public class MyNotification {
 	        notification.flags=Notification.FLAG_AUTO_CANCEL;
 	        notification.setLatestEventInfo(context,title,"here to cancel the auto login",appIntent);
 	        notificationManager.notify(1,notification);	
-//			new Thread(new Runnable() {
-//				public void run() {
-//	        		try {
-//						Thread.sleep(20000);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					notificationManager.cancel(1);
-//				}
-//			}).start();
 		}
 		else{
 			notificationManager.cancel(1);
