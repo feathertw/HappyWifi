@@ -56,11 +56,13 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
-		
-		init();
+		//prevent double open app
 		clearService();
-        
+
+		init();
 		initSetting();
+		
+		//for auto setting
 		if(switchAutoWifi){
 			startService(new Intent(this, ToWifiService.class));
 			
@@ -71,8 +73,6 @@ public class MainActivity extends Activity {
 		        startService(new Intent(this, ToLoginService.class));
 			}
 		}
-
-		
 	}
 	
 	protected void onResume() {
@@ -85,7 +85,6 @@ public class MainActivity extends Activity {
 		super.onPause();
 		Log.i(TAG,"+++++++++++ON PAUSE+++++++++++");
 		storePREF();
-//		finish();//new
 	}	
 
 	private void clearService(){
@@ -99,6 +98,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void init(){
+		Log.i(TAG, "----------init()----------");
 		mPref=new MyPreference(this);
 		mNotif=new MyNotification(this);
 		
@@ -107,7 +107,6 @@ public class MainActivity extends Activity {
 		bLogin = (Button) findViewById(R.id.login);
 		bSetting = (Button) findViewById(R.id.setting);
 		tMailType = (TextView) findViewById(R.id.mail_type);
-		
 	}
 	
 	private void initSetting(){
@@ -127,7 +126,6 @@ public class MainActivity extends Activity {
 		
 		bLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-//				storePREF();
 				if(!MyOperateState.ToWifiService) startService(new Intent(MainActivity.this, ToWifiService.class));
 				finish();
 				startService(new Intent(MainActivity.this, ToLoginService.class));
@@ -165,6 +163,7 @@ public class MainActivity extends Activity {
     			else						cMailType.setChecked(false);
     			
     			if(!switchAutoWifi)	cAutoLogin.setEnabled(false);
+    			
     			cAutoWifi.setOnCheckedChangeListener(new OnCheckedChangeListener() {
     				public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
     					switchAutoWifi=isChecked;
@@ -181,12 +180,14 @@ public class MainActivity extends Activity {
     					}
     				}
     			});
+    			
     			cAutoLogin.setOnCheckedChangeListener(new OnCheckedChangeListener() {
     				public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
     					switchAutoLogin=isChecked;
     					mPref.setBoolean(MyPreference.PREF_SWITCH_AUTOLOGIN, switchAutoLogin);
     				}
     			});
+    			
     			cMailType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
     				public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
     					
@@ -262,13 +263,13 @@ public class MainActivity extends Activity {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-    	if(MyOperateState.D) Log.i(TAG,"----------onCreateOptionsMenu()----------");
+    	Log.i(TAG,"----------onCreateOptionsMenu()----------");
     	menu.add(0,MENU_ABOUT,0,R.string.about).setIcon(android.R.drawable.ic_menu_edit);
         return true;
     }
     
     public boolean onOptionsItemSelected(MenuItem item){
-    	if(MyOperateState.D) Log.i(TAG,"----------onOptionsItemSelected()----------");
+    	Log.i(TAG,"----------onOptionsItemSelected()----------");
 		
     	switch(item.getItemId() ){
     		case MENU_ABOUT:
@@ -277,7 +278,8 @@ public class MainActivity extends Activity {
     			.setMessage(R.string.about_content)
     			.setPositiveButton(R.string.about_comment, new DialogInterface.OnClickListener() {
     	    		public void onClick(DialogInterface arg0, int arg1) {
-    					try {
+    					//open the app website in google play
+    	    			try {
     						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+"tw.tools.ncku.wifi")));
     					}catch (android.content.ActivityNotFoundException anfe) {
     						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id="+"tw.tools.ncku.wifi")));
