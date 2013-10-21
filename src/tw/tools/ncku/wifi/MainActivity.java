@@ -56,10 +56,9 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
+		init();
 		//prevent double open app
 		clearService();
-
-		init();
 		initSetting();
 		
 		//for auto setting
