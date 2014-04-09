@@ -15,11 +15,11 @@ Function:
 5. Provide for manually selecting the wifi certificate
 
 
-How to Modify?</br>
-1. Copy 'src/tw/parameters/TEMPLETE.java' to a new file like 'XXXX.java' at the same file position.</br>
-2. Modify the content of <font colot="#FF0000">XXXX.java</font> for your wifi certificate.</br>
-3. Add a line 'schoolList.add(XXXX.getSchool());' in 'SchoolCheck.java' in function 'SchoolCheck()'</br>
-4. Test it works or not.</br>
+How to Modify?  
+1. Copy 'src/tw/parameters/TEMPLETE.java' to a new file like 'XXXX.java' at the same file position.  
+2. Modify the content of <font colot="#FF0000">XXXX.java</font> for your wifi certificate.  
+3. Add a line 'schoolList.add(XXXX.getSchool());' in 'SchoolCheck.java' in function 'SchoolCheck()'  
+4. Test it works or not.  
 
 -If you don't know wifi certificate information, please refer the html code when log in in the browser.
 
