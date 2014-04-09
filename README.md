@@ -12,13 +12,14 @@ Function:
 
 
 How to Modify?  
-   1. Copy 'src/tw/parameters/TEMPLETE.java' to a new file like 'XXXX.java' at the same file position.
-   2. Modify the content of *XXXX.java* for your wifi certificate.
-   3. Add a line ***schoolList.add(XXXX.getSchool());*** in 'SchoolCheck.java' in function 'SchoolCheck()'
-   4. Test it works or not.
+ 1. Copy *src/tw/parameters/TEMPLETE.java* to a new file like ***SampleSchool.java*** at the same file directory.
+ 2. Modify the content of ***SampleSchool.java*** for your wifi certificate, detail at below.
+ 3. Add a line ***schoolList.add(SampleSchool.getSchool());*** in *src/tw/parameters/SchoolCheck.java* in function *SchoolCheck()*
+ 4. Test it works or not.
    If you don't know wifi certificate information, please refer the html code when log in in the browser.
 
 SampleLogin.html
+```
 	<form action="https://Sample.edu.tw/login.php">
 	   <input type="text" name="SampleAccount">
 	   <input type="password" name="SamplePassword">
@@ -26,12 +27,15 @@ SampleLogin.html
 	   <input type="hidden" name="SampleLogin2" value="SampleLoginValue2">
 	   <input type="submit" value="submit">
 	</form>
+```
 
 SampleLogout.html
+```
 	<form action="https://Sample.edu.tw/logout.php">
 	   <input type="hidden" name="SampleLogout1" value="SampleLogoutValue1">
 	   <input type="submit" value="submit">
 	</form>
+```
 
 
 SampleSchool.java
