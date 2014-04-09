@@ -19,7 +19,7 @@ How to Modify?
 
 1. Copy 'src/tw/parameters/TEMPLETE.java' to a new file like 'XXXX.java' at the same file position.
 
-2. Modify the content of 'XXXX.java' for your wifi certificate.
+2. Modify the content of '<font colot="#FF0000">XXXX.java</font>' for your wifi certificate.
 
 3. Add a line 'schoolList.add(XXXX.getSchool());' in 'SchoolCheck.java' in function 'SchoolCheck()'
 
