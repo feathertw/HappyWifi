@@ -4,34 +4,34 @@ An android app for helping log into the wifi certificate automatically.
  
 Function:
 
--Record the account and password
--Open wifi automatically
--Log into wifi certificate automatically
--Provide the list for email type
--Provide for manually selecting the wifi certificate
+- Record the account and password
+- Open wifi automatically
+- Log into wifi certificate automatically
+- Provide the list for email type
+- Provide for manually selecting the wifi certificate
 
 
 How to Modify?  
--Copy 'src/tw/parameters/TEMPLETE.java' to a new file like 'XXXX.java' at the same file position.
--Modify the content of *XXXX.java* for your wifi certificate.
--Add a line 'schoolList.add(XXXX.getSchool());' in 'SchoolCheck.java' in function 'SchoolCheck()'
--Test it works or not.
--If you don't know wifi certificate information, please refer the html code when log in in the browser.
+- Copy 'src/tw/parameters/TEMPLETE.java' to a new file like 'XXXX.java' at the same file position.
+- Modify the content of *XXXX.java* for your wifi certificate.
+- Add a line 'schoolList.add(XXXX.getSchool());' in 'SchoolCheck.java' in function 'SchoolCheck()'
+- Test it works or not.
+- If you don't know wifi certificate information, please refer the html code when log in in the browser.
 
 SampleLogin.html
-<form action="https://Sample.edu.tw/login.php">
-   <input type="text" name="SampleAccount">
-   <input type="password" name="SamplePassword">
-   <input type="hidden" name="SampleLogin1" value="SampleLoginValue1">
-   <input type="hidden" name="SampleLogin2" value="SampleLoginValue2">
-   <input type="submit" value="submit">
-</form>
+	<form action="https://Sample.edu.tw/login.php">
+	   <input type="text" name="SampleAccount">
+	   <input type="password" name="SamplePassword">
+	   <input type="hidden" name="SampleLogin1" value="SampleLoginValue1">
+	   <input type="hidden" name="SampleLogin2" value="SampleLoginValue2">
+	   <input type="submit" value="submit">
+	</form>
 
 SampleLogout.html
-<form action="https://Sample.edu.tw/logout.php">
-   <input type="hidden" name="SampleLogout1" value="SampleLogoutValue1">
-   <input type="submit" value="submit">
-</form>
+	<form action="https://Sample.edu.tw/logout.php">
+	   <input type="hidden" name="SampleLogout1" value="SampleLogoutValue1">
+	   <input type="submit" value="submit">
+	</form>
 
 
 SampleSchool.java
