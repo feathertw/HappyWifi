@@ -13,13 +13,12 @@ Function:
 
 How to Modify?  
  1. Copy *src/tw/parameters/TEMPLETE.java* to a new file like ***SampleSchool.java*** at the same file directory.
- 2. Modify the content of ***SampleSchool.java*** for your wifi certificate, detail at below.
+ 2. Modify the content of *SampleSchool.java* for your wifi certificate, detail at below.
  3. Add a line ***schoolList.add(SampleSchool.getSchool());*** in *src/tw/parameters/SchoolCheck.java* in function *SchoolCheck()*
  4. Test it works or not.
    If you don't know wifi certificate information, please refer the html code when log in in the browser.
 
-SampleLogin.html
-```
+SampleLogin.html```
 	<form action="https://Sample.edu.tw/login.php">
 	   <input type="text" name="SampleAccount">
 	   <input type="password" name="SamplePassword">
@@ -29,8 +28,7 @@ SampleLogin.html
 	</form>
 ```
 
-SampleLogout.html
-```
+SampleLogout.html```
 	<form action="https://Sample.edu.tw/logout.php">
 	   <input type="hidden" name="SampleLogout1" value="SampleLogoutValue1">
 	   <input type="submit" value="submit">
@@ -38,8 +36,7 @@ SampleLogout.html
 ```
 
 
-SampleSchool.java
-
+SampleSchool.java```
    school.name="Sample";
    school.mail="@Sample.edu.tw";
    school.accountPara="SampleAccount";
@@ -53,6 +50,7 @@ SampleSchool.java
    school.LogoutDataPair.add(new BasicNameValuePair("SampleLogout1", "SampleLogoutValue1"));
    school.ssid.add("SampleWifiSSID1");
    school.ssid.add("SampleWifiSSID2");
+```
 
 If you from Taiwan's university,
 welcome to share the certificate information, I can integrate them to HappyWifi and make everyone more convinient =)
