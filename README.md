@@ -17,7 +17,7 @@ How to Modify?
  3. Add a line ***schoolList.add(SampleSchool.getSchool());*** in *src/tw/parameters/SchoolCheck.java* in function *SchoolCheck()*
  4. Test it works or not.
    
-If you don't know wifi certificate information, please refer the html code when logging in in the browser. There are the example logging in and logging out web page. Maybe is not the sample but still similar. You can refer this.
+If you don't know wifi certificate information, please refer the html code when logging in in the browser. There are the example logging in and logging out web page. Maybe is not the same but still similar. You can refer this.
 
 SampleLogin.html
 ```
