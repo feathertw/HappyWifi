@@ -17,7 +17,7 @@ How to Modify?
  3. Add a line ***schoolList.add(SampleSchool.getSchool());*** in *src/tw/parameters/SchoolCheck.java* in function *SchoolCheck()*
  4. Test it works or not.
    
-If you don't know wifi certificate information, please refer the html code when log in in the browser.
+If you don't know wifi certificate information, please refer the html code when logging in the browser.
 
 SampleLogin.html
 ```
@@ -47,16 +47,16 @@ SampleSchool.java
    school.passwordPara="SamplePassword";
    school.loginHttps="https://Sample.edu.tw/login.php";
    school.logoutHttps="https://Sample.edu.tw/logout.php";
-   school.loginAppearValue="Login Successful";
-   school.logoutAppearValue="Logout Successful";
-   school.LoginDataPair.add(new BasicNameValuePair("SampleLogin1", "SampleLoginValue1"));
-   school.LoginDataPair.add(new BasicNameValuePair("SampleLogin2", "SampleLoginValue2"));
-   school.LogoutDataPair.add(new BasicNameValuePair("SampleLogout1", "SampleLogoutValue1"));
-   school.ssid.add("SampleWifiSSID1");
-   school.ssid.add("SampleWifiSSID2");
+   school.loginAppearValue="Login Successful";    //key word from return value to logging in target
+   school.logoutAppearValue="Logout Successful";  //key word from return value to logging out target
+   school.LoginDataPair.add(new BasicNameValuePair("SampleLogin1", "SampleLoginValue1"));    //not necessary
+   school.LoginDataPair.add(new BasicNameValuePair("SampleLogin2", "SampleLoginValue2"));    //not necessary
+   school.LogoutDataPair.add(new BasicNameValuePair("SampleLogout1", "SampleLogoutValue1")); //not necessary
+   school.ssid.add("SampleWifiSSID1"); //Wifi SSID
+   school.ssid.add("SampleWifiSSID2"); //Wifi SSID
 ```
 
-If you from Taiwan's university,
+If you are from Taiwan's university,
 welcome to share the certificate information, I can integrate them to HappyWifi and make everyone more convinient =)
 
 Hope there are no authorization problem.
